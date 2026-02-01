@@ -76,9 +76,6 @@ export class AudiobookshelfApi {
             localStorage.setItem("abs_api_refreshToken", this.refreshToken);
             localStorage.setItem("abs_api_user", JSON.stringify(this.user));
         }
-
-
-        localStorage.setItem("abs_api_baseUrl", this._baseUrl);
     }
 
     private saveUser(user: User) {
@@ -98,7 +95,6 @@ export class AudiobookshelfApi {
     }
 
     private loadTokens() {
-    	this._baseUrl = this.normalizeBaseUrl(localStorage.getItem("abs_api_baseUrl") ?? "");
         this.accessToken = localStorage.getItem("abs_api_accessToken");
         this.refreshToken = localStorage.getItem("abs_api_refreshToken");
         this.user = JSON.parse(localStorage.getItem("abs_api_user") ?? "{}");
@@ -299,7 +295,6 @@ export class AudiobookshelfApi {
         this.user = null;
 
         if (full) {
-	        localStorage.removeItem("abs_api_baseUrl");
 	        localStorage.removeItem("abs_api_username");
         }
         localStorage.removeItem("abs_api_accessToken");

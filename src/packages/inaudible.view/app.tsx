@@ -15,7 +15,6 @@ import type { AudiobookshelfApi } from '../audiobookshelf.api/service';
 import type { AudiobookshelfMeApi } from '../audiobookshelf.api/service/me';
 import { useLayoutEffect, useMemo, useRef } from 'preact/hooks';
 import type { MediaProgress } from '../audiobookshelf.api/interfaces/model/media-progress';
-import type { ServerSettings } from '../audiobookshelf.api/interfaces/model/server-settings';
 
 const loading = signal<boolean>(false);
 const total = signal<number>(100);
@@ -68,18 +67,14 @@ const auth = {
 	checking: signal(true),
 };
 
-const hasOpenId = (settings: ServerSettings | null) => {
-    const methods = settings?.authActiveAuthMethods ?? [];
-    const openIdMethod = methods.some((method) => method.toLowerCase().includes("openid") || method.toLowerCase().includes("oidc"));
-    return openIdMethod || !!settings?.authOpenIDIssuerURL;
-};
-
 const controller = () => {
  	const api = container.get("audiobookshelf.api") as AudiobookshelfApi;
     const inaudibleService = container.get("inaudible.service") as InaudibleService;
-    const serverUrl = useMemo(() => signal<string>(localStorage.getItem("abs_api_baseUrl") ?? ""), []);
-    const serverSettings = useMemo(() => signal<ServerSettings | null>(null), []);
-    const serverSettingsChecking = useMemo(() => signal<boolean>(false), []);
+    const serverUrl = useMemo(() => {
+        const envBaseUrl = (import.meta as any)?.env?.INAUDIBLE_AUDIOBOOKSHELF_API_BASE_URL as string | undefined;
+        const initial = envBaseUrl && envBaseUrl.trim().length > 0 ? envBaseUrl.trim() : api.getBaseUrl();
+        return signal<string>(initial);
+    }, [api]);
     const openIdAvailable = useMemo(() => signal<boolean>(false), []);
     const openIdButtonText = useMemo(() => signal<string>("Login with OpenID"), []);
     const openIdPending = useMemo(() => signal<boolean>(false), []);
@@ -148,32 +143,6 @@ const controller = () => {
         await inaudibleService.myLibrary.storeProgress(items);
     };
 
-    const loadServerSettings = async (nextServerUrl?: string) => {
-        const targetUrl = (nextServerUrl ?? serverUrl.value ?? "").trim();
-        if (!targetUrl) {
-            serverSettings.value = null;
-            openIdAvailable.value = false;
-            openIdButtonText.value = "Login with OpenID";
-            return;
-        }
-
-        serverSettingsChecking.value = true;
-        openIdError.value = null;
-        try {
-            const settings = await api.getServerSettings(targetUrl);
-            serverSettings.value = settings;
-            openIdAvailable.value = hasOpenId(settings);
-            openIdButtonText.value = settings?.authOpenIDButtonText || "Login with OpenID";
-        } catch (error) {
-            serverSettings.value = null;
-            openIdAvailable.value = false;
-            openIdButtonText.value = "Login with OpenID";
-            openIdError.value = "Unable to fetch server settings.";
-        } finally {
-            serverSettingsChecking.value = false;
-        }
-    };
-
     useLayoutEffect(() => {
         api.reloadTokens();
         api.setBaseUrl(serverUrl.value);
@@ -206,8 +175,6 @@ const controller = () => {
 	return {
 		...auth,
         serverUrl,
-        serverSettings,
-        serverSettingsChecking,
         openIdAvailable,
         openIdButtonText,
         openIdPending,
@@ -215,16 +182,6 @@ const controller = () => {
         loginLoading,
         libraries,
         selectedLibraryId,
-        loadServerSettings,
-        updateServerUrl: (nextUrl: string) => {
-            serverUrl.value = nextUrl;
-            api.setBaseUrl(nextUrl);
-            localStorage.setItem("abs_api_baseUrl", api.getBaseUrl());
-            openIdAvailable.value = false;
-            openIdButtonText.value = "Login with OpenID";
-            openIdPending.value = false;
-            openIdError.value = null;
-        },
         setSelectedLibraryId: (nextId: string) => {
             selectedLibraryId.value = nextId;
             localStorage.setItem("inaudible.libraryId", nextId);
@@ -265,7 +222,6 @@ const controller = () => {
             }
 
             api.setBaseUrl(targetUrl);
-            localStorage.setItem("abs_api_baseUrl", api.getBaseUrl());
 
             const loginUrl = `${targetUrl}/audiobookshelf/login`;
             const popup = window.open(loginUrl, "_blank", "noopener");
@@ -352,7 +308,7 @@ const App = () => {
 
 		</adw-content>
 		<PlayerDock />
-		<LoginDialog
+        <LoginDialog
             serverUrl={auth.serverUrl}
             checking={auth.checking}
             onboardingComplete={onboardingComplete}
@@ -371,9 +327,6 @@ const App = () => {
             openIdPending={auth.openIdPending}
             openIdError={auth.openIdError}
             loginLoading={auth.loginLoading}
-            serverSettingsChecking={auth.serverSettingsChecking}
-            updateServerUrl={auth.updateServerUrl}
-            loadServerSettings={auth.loadServerSettings}
             login={auth.login}
             loginOpenId={auth.loginOpenId}
             finishOpenIdLogin={auth.finishOpenIdLogin}

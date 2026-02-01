@@ -14,8 +14,16 @@ export const container = new Map<string, object>;
 export type Container = typeof container;
 
 
+const getApiUrl = () => {
+    const envBaseUrl = import.meta.env?.INAUDIBLE_AUDIOBOOKSHELF_API_BASE_URL as string | undefined;
+    if (envBaseUrl && envBaseUrl.trim().length > 0) {
+        return envBaseUrl.trim();
+    }
+    return "";
+};
+
 export const init = async () => {
-    const apiBaseUrl = localStorage.getItem("abs_api_baseUrl") ?? "";
+    const apiBaseUrl = getApiUrl();
     const api = new AudiobookshelfApi(apiBaseUrl);
     const store = new AudiobookStore();
     const service = new InaudibleService(container);

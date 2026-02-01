@@ -20,9 +20,6 @@ type Props = {
     openIdPending: { value: boolean };
     openIdError: { value: string | null };
     loginLoading: { value: boolean };
-    serverSettingsChecking: { value: boolean };
-    updateServerUrl: (nextUrl: string) => void;
-    loadServerSettings: () => void;
     login: () => void;
     loginOpenId: () => void;
     finishOpenIdLogin: () => void;
@@ -47,15 +44,11 @@ export const LoginDialog = ({
     openIdPending,
     openIdError,
     loginLoading,
-    serverSettingsChecking,
-    updateServerUrl,
-    loadServerSettings,
     login,
     loginOpenId,
     finishOpenIdLogin,
 }: Props) => {
-    const [step, setStep] = useState<'server' | 'login' | 'sync'>('server');
-    const [serverConfirmed, setServerConfirmed] = useState(() => serverUrl.value.trim().length > 0);
+    const [step, setStep] = useState<'login' | 'sync'>('login');
     const dialogRef = useRef<HTMLDialogElement | null>(null);
 
     useEffect(() => {
@@ -63,21 +56,10 @@ export const LoginDialog = ({
             setStep('sync');
             return;
         }
-        if (!serverConfirmed) {
-            setStep('server');
-            return;
-        }
         if (step === 'sync') {
             setStep('login');
         }
-    }, [loggedIn.value, serverConfirmed, step]);
-
-    useEffect(() => {
-        if (serverUrl.value.trim().length > 0 && !serverConfirmed) {
-            setServerConfirmed(true);
-            setStep('login');
-        }
-    }, [serverUrl.value]);
+    }, [loggedIn.value, step]);
 
     useEffect(() => {
         if (step !== 'sync') {
@@ -87,10 +69,6 @@ export const LoginDialog = ({
             onSelectLibrary(libraries.value[0].id);
         }
     }, [step, libraries.value.length, selectedLibraryId.value]);
-
-    useEffect(() => {
-        return;
-    }, [step, serverUrl.value]);
 
     useEffect(() => {
         const dialog = dialogRef.current;
@@ -123,7 +101,7 @@ export const LoginDialog = ({
         }
     };
 
-    const canContinueServer = serverUrl.value.trim().length > 0;
+    const hasServerUrl = serverUrl.value.trim().length > 0;
     const usernameDefault = (() => {
         const stored = localStorage.getItem("abs_api_username") ?? "";
         return stored.includes("://") ? "" : stored;
@@ -133,7 +111,7 @@ export const LoginDialog = ({
         <dialog id="login-dialog" is="adw-dialog" ref={dialogRef as any}>
             <adw-header>
                 <section></section>
-                {step === 'server' ? 'Server URL' : step === 'login' ? 'Inaudible Login' : 'First Sync'}
+                {step === 'login' ? 'Inaudible Login' : 'First Sync'}
                 <section></section>
             </adw-header>
             <form
@@ -143,24 +121,11 @@ export const LoginDialog = ({
                 onSubmit={handleSubmit as any}
                 aria-busy={loginLoading.value ? "true" : "false"}
             >
-                {step === 'server' ? (
-                    <fieldset disabled={loginLoading.value || serverSettingsChecking.value}>
-                        <p>Enter your audiobookshelf server URL to continue.</p>
-                        <label>
-                            Server Url
-                            <input
-                                key="server-url"
-                                name="server-url"
-                                type="text"
-                                placeholder="Server URL"
-                                value={serverUrl.value}
-                                onInput={(event) => updateServerUrl((event.target as HTMLInputElement).value)}
-                                autoComplete="off"
-                            />
-                        </label>
-                    </fieldset>
-                ) : step === 'login' ? (
+                {step === 'login' ? (
                     <fieldset disabled={loginLoading.value}>
+                        {!hasServerUrl && (
+                            <p>Set INAUDIBLE_AUDIOBOOKSHELF_API_BASE_URL in your .env to enable login.</p>
+                        )}
                         <p>Please enter your audiobookshelf credentials to login.</p>
                         <label>
                             Username
@@ -199,6 +164,7 @@ export const LoginDialog = ({
                 ) : (
                     <>
                         <p>Your library needs a first sync before you can continue.</p>
+                        <p>Please note: You may only sync one library.</p>
                         <label>
                             Library
                             <select
@@ -226,25 +192,13 @@ export const LoginDialog = ({
                 )}
             </form>
             <footer class="center">
-                {step === 'server' ? (
-                    <button
-                        class="primary"
-                        onClick={async () => {
-                            setServerConfirmed(true);
-                            setStep('login');
-                        }}
-                        disabled={!canContinueServer || loginLoading.value || serverSettingsChecking.value}
-                    >
-                        {serverSettingsChecking.value && <adw-spinner aria-hidden="true" style={{ marginRight: "0.5em" }} />}
-                        {serverSettingsChecking.value ? "Checking..." : "Continue"}
-                    </button>
-                ) : step === 'login' ? (
+                {step === 'login' ? (
                     <button
                         class="primary"
                         type="submit"
                         form="login-form"
                         onClick={() => login()}
-                        disabled={loginLoading.value}
+                        disabled={loginLoading.value || !hasServerUrl}
                     >
                         {loginLoading.value && <adw-spinner aria-hidden="true" style={{ marginRight: "0.5em" }} />}
                         {loginLoading.value ? "Logging in..." : "Login"}

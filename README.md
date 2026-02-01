@@ -53,6 +53,7 @@ cp .env.example .env.local
 
 ### Supported Variables
 
+ - `INAUDIBLE_AUDIOBOOKSHELF_API_BASE_URL` - Required* - Audiobookshelf api url domain (without /api or /audiobookshelf)
 - `VITE_HTTPS_KEY_PATH` — path to dev HTTPS key (optional)
 - `VITE_HTTPS_CERT_PATH` — path to dev HTTPS cert (optional)
 - `VITE_ALLOWED_HOSTS` — comma‑separated list for `vite preview` host allowlist
