@@ -51,6 +51,9 @@ Please see screenshots below with mock data provided by [Audiameta](https://audi
 - npm
 
 ## Quick Start (Docker Compose)
+
+Please note that this is subject to change in future. Right now it's just a container that runs npm commands and everything goes through vite preview. This will be rectified in future builds. With a proper docker image.
+
 ```sh
 services:
   inaudible:
