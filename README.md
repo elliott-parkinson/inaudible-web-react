@@ -48,6 +48,19 @@ There will be AI use in the future - however it will be kept to a minimum as it 
 - Node.js 20+
 - npm
 
+## Quick Start (Docker Compose)
+```sh
+services:
+  inaudible:
+    build:
+      context: https://github.com/elliott-parkinson/inaudible-web-react.git
+    container_name: inaudible
+    environment:
+      VITE_ALLOWED_HOSTS: ${VITE_ALLOWED_HOSTS:-""}
+      INAUDIBLE_AUDIOBOOKSHELF_API_BASE_URL: ${INAUDIBLE_AUDIOBOOKSHELF_API_BASE_URL:-""}
+      DENO_ENV: "production"
+```
+
 ## Quick Start (Local)
 
 ```sh
