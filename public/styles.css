@@ -32,7 +32,7 @@ ol.books {
   justify-content: start;
 
   > li {
-    width: 12em;
+    width: 11.5em;
     max-width: calc(50% - 0.5em);
     aspect-ratio: 1/1;
     margin: 0;

@@ -73,7 +73,7 @@ export default () => {
                     />
                 </form>
             </section>
-            <div className="tab-list">
+            <div className="tab-list" style={{ display: 'flex', gap: '1em', justifyContent: 'center', marginBlock: '0.6em' }}>
                 <button
                     type="button"
                     className={activeTab.value === 'books' ? 'active' : ''}

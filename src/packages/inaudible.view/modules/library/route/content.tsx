@@ -58,7 +58,7 @@ export default () => {
                 <section style={{ textAlign: 'center' }}>Loading... {loading.value}</section>
             ) : (
                 <>
-                    <section>
+                    <section style={{ marginBottom: '1em' }}>
                         <h3>Storage</h3>
                         {storage.value ? (
                             <p>
