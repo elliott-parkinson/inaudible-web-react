@@ -16,6 +16,33 @@ This project was written 95% without the use of any AI at all. AI has been used 
 
 There will be AI use in the future - however it will be kept to a minimum as it has been so far.
 
+## Features
+- Library browsing: books, series, authors
+- Discover view with categories
+- Audiobook playing
+- Local metadata cache for faster browsing
+- "My Library" concept with ability to add items to it that you intend on listening to later.
+
+## Screenshots
+
+![Discover](screenshots/discover.png)
+
+![Playing](screenshots/playing.png)
+
+![My Library](screenshots/my-library.png)
+
+![Books](screenshots/books.png)
+
+![Book](screenshots/book.png)
+
+![Series](screenshots/series.png)
+
+![Series Item](screenshots/series-item.png)
+
+![Authors](screenshots/authors.png)
+
+![Stats](screenshots/stats.png)
+
 ## Requirements
 
 - Node.js 20+
@@ -91,33 +118,6 @@ If you run behind a reverse proxy (e.g., Caddy, Nginx), set `VITE_ALLOWED_HOSTS`
 ```env
 VITE_ALLOWED_HOSTS=your.domain.com
 ```
-
-## Features
-- Library browsing: books, series, authors
-- Discover view with categories
-- Audiobook playing
-- Local metadata cache for faster browsing
-- "My Library" concept with ability to add items to it that you indend on listening to later.
-
-## Screenshots
-
-![Discover](screenshots/discover.png)
-
-![Playing](screenshots/playing.png)
-
-![My Library](screenshots/my-library.png)
-
-![Books](screenshots/books.png)
-
-![Book](screenshots/book.png)
-
-![Series](screenshots/series.png)
-
-![Series Item](screenshots/series-item.png)
-
-![Authors](screenshots/authors.png)
-
-![Stats](screenshots/stats.png)
 
 ## Scripts
 
