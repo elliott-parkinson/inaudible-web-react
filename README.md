@@ -14,7 +14,7 @@ This project was written 95% without the use of any AI at all. AI has been used 
  - Fix a bug with playing audiobooks / streaming
  - Fix a bug with audiobook downloads due to the various formats / file layouts possible in audiobookshelf.
 
-There will be AI use in the future - however it will be kept to a minimum as it has been so far.
+This was not code generation, just chatting with an AI agent and reviewing code it generated before adding it in to the project manually myself. There will be AI use in the future - however it will be kept to a minimum (my end at least) as it has been so far. AI generated pull requests will be accepted so long as they are clearly stated to be AI and are of sufficient standard / do not cause problems. Therefore I would strongly advise anyone considering such a request to be an experienced software developer who can read and understand the generated code and wider implications. Expedience is okay - degrading the codebase is not.
 
 ## Features
 - Library browsing: books, series, authors
@@ -44,6 +44,17 @@ Please see screenshots below with mock data provided by [Audiameta](https://audi
 ![Authors](screenshots/authors.png)
 
 ![Stats](screenshots/stats.png)
+
+
+## Roadmap / Planned future features
+ - Upgrade to a better UI library ( I have a proper adwaita web port in the works).
+ - OAUTH / OIDC login support
+ - Ability to remove items from "my library".
+ - Profile screen that isnt absolute garbage.
+ - Stats that are more useful
+ - WIP: Move over to using a worker for the service, model / store and api access (simplify frontend)
+ - Consider ditching react for a pure web components approach? Perhaps lit?
+ - Consider ditching react for solidjs?
 
 ## Requirements
 
