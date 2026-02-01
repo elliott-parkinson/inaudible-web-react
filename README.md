@@ -55,6 +55,7 @@ Please see screenshots below with mock data provided by [Audiameta](https://audi
  - WIP: Move over to using a worker for the service, model / store and api access (simplify frontend)
  - Consider ditching react for a pure web components approach? Perhaps lit?
  - Consider ditching react for solidjs?
+ - Dark mode support
 
 ## Requirements
 
