@@ -102,6 +102,7 @@ export const LoginDialog = ({
     };
 
     const hasServerUrl = serverUrl.value.trim().length > 0;
+    const serverUrlMissingMessage = "Contact your administrator: INAUDIBLE_AUDIOBOOKSHELF_API_BASE_URL has not been provided.";
     const usernameDefault = (() => {
         const stored = localStorage.getItem("abs_api_username") ?? "";
         return stored.includes("://") ? "" : stored;
@@ -123,9 +124,7 @@ export const LoginDialog = ({
             >
                 {step === 'login' ? (
                     <fieldset disabled={loginLoading.value}>
-                        {!hasServerUrl && (
-                            <p>Set INAUDIBLE_AUDIOBOOKSHELF_API_BASE_URL in your .env to enable login.</p>
-                        )}
+                        {!hasServerUrl && <p>{serverUrlMissingMessage}</p>}
                         <p>Please enter your audiobookshelf credentials to login.</p>
                         <label>
                             Username
