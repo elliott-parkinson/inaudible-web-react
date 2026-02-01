@@ -9,19 +9,25 @@ The project is visually in the style of libadwaita (or a rough representation of
 
 ## AI Statement
 This project was written 95% without the use of any AI at all. AI has been used to:
- - Generate this initial readme.
  - Generate the logo svg
+ - Generate this initial readme.
  - Fix a bug with playing audiobooks / streaming
  - Fix a bug with audiobook downloads due to the various formats / file layouts possible in audiobookshelf.
 
 This was not code generation, just chatting with an AI agent and reviewing code it generated before adding it in to the project manually myself. There will be AI use in the future - however it will be kept to a minimum (my end at least) as it has been so far. AI generated pull requests will be accepted so long as they are clearly stated to be AI and are of sufficient standard / do not cause problems. Therefore I would strongly advise anyone considering such a request to be an experienced software developer who can read and understand the generated code and wider implications. Expedience is okay - degrading the codebase is not.
 
 ## Features
-- Library browsing: books, series, authors
-- Discover view with categories
-- Audiobook playing
-- Local metadata cache for faster browsing
-- "My Library" concept with ability to add items to it that you intend on listening to later.
+- This works differently from audiobookshelf and other apps in that it does not fetch from the API each time you load a page etc. It creates a duplicate of the library via synchronization and performs updates instead, there is a button to force a full sync at the top. This means that even offline, you can browse your entire library. The page loads near instantly even if you have a slow audiobookshelf server and the experience is smoother. This comes with the sacrifice of about a minute during intitial setup (partial syncs run in the background and are way faster).
+- "My Library" - you can add books to your library, and browse just them. Really helpful when you might have a massive library / server and dont want to go through them all the time, or wish to add to some kind of a "read later" list. It works by telling audiobookshelf that the media progress on that book is 5 seconds in. Which means that all other Inaudible instances will also pick it up as it is synced with the server. This does come at the downside of audiobookshelf having tonnes of "unfinished" books that have just been started. I am going to perform a pull request for this feature to be built into audiobookshelf itself so it can be done properly.
+- Playback
+- Downloads (and local playback) (with space left and used information provided).
+- Basic Stats
+- Browse library / authors / books / series
+    
+
+## What is missing
+
+The intent of Inaudible is to feel more like audible where you add books to your own library and browse that. Audiobookshelf itself isn't just an audiobook reader, it's also a metadata manager and file manager etc. Inaudible aims to solve just one side of that problem and leaves the metadata management to audiobookshelf itself. Metadata management will never be added to Inaudible. 
 
 ## Screenshots
 
