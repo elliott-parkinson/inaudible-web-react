@@ -25,6 +25,8 @@ There will be AI use in the future - however it will be kept to a minimum as it 
 
 ## Screenshots
 
+Please see screenshots below with mock data provided by [Audiameta](https://audimeta.de).
+
 ![Discover](screenshots/discover.png)
 
 ![Playing](screenshots/playing.png)
